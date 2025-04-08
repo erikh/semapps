@@ -6,8 +6,8 @@ const { getSlugFromUri } = require('../utils');
 const modifyActions = [
   'ldp.resource.create',
   'ldp.container.create',
-  'activitypub.collection.post',
-  'activitypub.object.createTombstone',
+  'socialapi.collection.post',
+  'socialapi.object.createTombstone',
   'webid.createWebId',
   'ldp.remote.store',
   'ldp.remote.delete',
@@ -288,7 +288,7 @@ const WebAclMiddleware = ({ baseUrl, podProvider = false, graphName = 'http://se
             await addRightsToNewUser(ctx, actionReturnValue);
             break;
 
-          case 'activitypub.object.createTombstone':
+          case 'socialapi.object.createTombstone':
             // Tombstones should be public
             await ctx.call(
               'webacl.resource.addRights',
@@ -332,7 +332,7 @@ const WebAclMiddleware = ({ baseUrl, podProvider = false, graphName = 'http://se
             break;
           }
 
-          case 'activitypub.collection.post': {
+          case 'socialapi.collection.post': {
             // If a `permissions` param is passed when creating the collection, delete the permissions added before creation
             // (through the `newResourcesPermissions` of the collection container) and add these permissions instead
             if (ctx.params.permissions) {

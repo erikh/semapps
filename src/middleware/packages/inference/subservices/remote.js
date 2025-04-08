@@ -13,9 +13,9 @@ module.exports = {
     acceptFromRemoteServers: true,
     offerToRemoteServers: true
   },
-  dependencies: ['activitypub.relay'],
+  dependencies: ['socialapi.relay'],
   async started() {
-    this.relayActor = await this.broker.call('activitypub.relay.getActor');
+    this.relayActor = await this.broker.call('socialapi.relay.getActor');
   },
   actions: {
     offerInference: {
@@ -34,7 +34,7 @@ module.exports = {
           });
 
           if (remoteRelayActorUri) {
-            await ctx.call('activitypub.outbox.post', {
+            await ctx.call('socialapi.outbox.post', {
               collectionUri: this.relayActor.outbox,
               '@context': 'https://www.w3.org/ns/activitystreams',
               actor: this.relayActor.id,

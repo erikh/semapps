@@ -3,7 +3,9 @@ const path = require('path');
 const urlJoin = require('url-join');
 const Redis = require('ioredis');
 const { ServiceBroker } = require('moleculer');
-const { FULL_ACTOR_TYPES, RelayService } = require('@semapps/activitypub');
+const { FULL_ACTOR_TYPES } = require('@semapps/activitypub');
+const { RelayService: ActivityPubRelayService } = require('@semapps/activitypub');
+const { RelayService } = require('@semapps/socialapi');
 const { AuthLocalService } = require('@semapps/auth');
 const { CoreService } = require('@semapps/core');
 const { InferenceService } = require('@semapps/inference');
@@ -58,6 +60,14 @@ const initialize = async (port, mainDataset, accountsDataset, queueServiceDb, se
   });
 
   broker.createService({
+    mixins: [ActivityPubRelayService]
+  });
+
+  broker.createService({
+    mixins: [RelayService]
+  });
+
+  broker.createService({
     mixins: [CoreService],
     settings: {
       baseUrl,
@@ -83,8 +93,6 @@ const initialize = async (port, mainDataset, accountsDataset, queueServiceDb, se
       }
     }
   });
-
-  broker.createService({ mixins: [RelayService] });
 
   if (serverToMirror) {
     broker.createService({

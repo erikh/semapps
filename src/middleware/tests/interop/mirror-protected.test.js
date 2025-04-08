@@ -16,7 +16,7 @@ beforeAll(async () => {
   server1 = await initialize(3001, 'testData1', 'settings1', 1);
 
   // Wait for Relay actor creation, or server2 won't be able to mirror server1
-  await server1.call('activitypub.actor.awaitCreateComplete', {
+  await server1.call('socialapi.actor.awaitCreateComplete', {
     actorUri: relay1
   });
 
@@ -34,7 +34,7 @@ describe('Resource on server1 is shared with user on server2', () => {
   test('Server2 follow server1', async () => {
     await waitForExpect(async () => {
       await expect(
-        server1.call('activitypub.collection.includes', {
+        server1.call('socialapi.collection.includes', {
           collectionUri: urlJoin(relay1, 'followers'),
           itemUri: relay2
         })
@@ -50,7 +50,7 @@ describe('Resource on server1 is shared with user on server2', () => {
       name: 'Sébastien'
     });
 
-    user2 = await server2.call('activitypub.actor.awaitCreateComplete', { actorUri: webId });
+    user2 = await server2.call('socialapi.actor.awaitCreateComplete', { actorUri: webId });
 
     resourceUri = await server1.call('ldp.container.post', {
       resource: {
@@ -77,11 +77,11 @@ describe('Resource on server1 is shared with user on server2', () => {
     });
 
     await waitForExpect(async () => {
-      const outboxMenu = await server1.call('activitypub.collection.get', {
+      const outboxMenu = await server1.call('socialapi.collection.get', {
         resourceUri: `${relay1}/outbox`,
         webId: relay1
       });
-      const inbox = await server1.call('activitypub.collection.get', {
+      const inbox = await server1.call('socialapi.collection.get', {
         resourceUri: `${relay1}/outbox`,
         afterEq: new URL(outboxMenu?.first).searchParams.get('afterEq'),
         webId: relay1
@@ -110,11 +110,11 @@ describe('Resource on server1 is shared with user on server2', () => {
     });
 
     await waitForExpect(async () => {
-      const outboxMenu = await server1.call('activitypub.collection.get', {
+      const outboxMenu = await server1.call('socialapi.collection.get', {
         resourceUri: `${relay1}/outbox`,
         webId: relay1
       });
-      const inbox = await server1.call('activitypub.collection.get', {
+      const inbox = await server1.call('socialapi.collection.get', {
         resourceUri: `${relay1}/outbox`,
         afterEq: new URL(outboxMenu?.first).searchParams.get('afterEq'),
         webId: relay1

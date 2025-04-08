@@ -16,7 +16,7 @@ beforeAll(async () => {
   server1 = await initialize(3001, 'testData1', 'settings1', 1);
 
   // Wait for Relay actor creation, or server2 won't be able to mirror server1
-  await server1.call('activitypub.actor.awaitCreateComplete', {
+  await server1.call('socialapi.actor.awaitCreateComplete', {
     actorUri: relay1
   });
 
@@ -33,7 +33,7 @@ describe('Server2 mirror server1', () => {
   test('Server2 follow server1', async () => {
     await waitForExpect(async () => {
       await expect(
-        server1.call('activitypub.collection.includes', {
+        server1.call('socialapi.collection.includes', {
           collectionUri: urlJoin(relay1, 'followers'),
           itemUri: relay2
         })

@@ -144,8 +144,8 @@ const ProxyService = {
       const { webId } = ctx.params;
       if (this.settings.podProvider) {
         const services = await ctx.call('$node.services');
-        if (services.filter(s => s.name === 'activitypub.actor')) {
-          await ctx.call('activitypub.actor.addEndpoint', {
+        if (services.filter(s => s.name === 'socialapi.actor')) {
+          await ctx.call('socialapi.actor.addEndpoint', {
             actorUri: webId,
             predicate: 'https://www.w3.org/ns/activitystreams#proxyUrl',
             endpoint: urlJoin(webId, 'proxy')

@@ -12,8 +12,8 @@ const SynchronizerService = {
   },
   async started() {
     if (!this.settings.podProvider) {
-      await this.broker.waitForServices('activitypub.relay');
-      this.relayActor = await this.broker.call('activitypub.relay.getActor');
+      await this.broker.waitForServices('socialapi.relay');
+      this.relayActor = await this.broker.call('socialapi.relay.getActor');
     }
   },
   methods: {
@@ -32,7 +32,7 @@ const SynchronizerService = {
         if (recipientUri !== this.relayActor.id) return false;
 
         // Check that the activity emitter is being followed by the relay actor
-        return await this.broker.call('activitypub.follow.isFollowing', {
+        return await this.broker.call('socialapi.follow.isFollowing', {
           follower: recipientUri,
           following: activity.actor
         });

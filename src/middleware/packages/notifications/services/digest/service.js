@@ -55,9 +55,9 @@ const DigestNotificationsService = {
 
       for (const subscription of subscriptions) {
         try {
-          const subscriber = await ctx.call('activitypub.actor.get', { actorUri: subscription.webId });
+          const subscriber = await ctx.call('socialapi.actor.get', { actorUri: subscription.webId });
           const account = await ctx.call('auth.account.findByWebId', { webId: subscription.webId });
-          const newActivities = await ctx.call('activitypub.inbox.getByDates', {
+          const newActivities = await ctx.call('socialapi.inbox.getByDates', {
             collectionUri: subscriber.inbox,
             fromDate: previousDate,
             toDate: currentDate

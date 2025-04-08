@@ -16,8 +16,8 @@ module.exports = {
   dependencies: [
     'triplestore',
     'webfinger',
-    'activitypub',
-    'activitypub.relay',
+    'socialapi',
+    'socialapi.relay',
     'auth.account',
     'ldp.container',
     'ldp.registry'
@@ -34,7 +34,7 @@ module.exports = {
     });
   },
   async started() {
-    this.relayActor = await this.broker.call('activitypub.relay.getActor');
+    this.relayActor = await this.broker.call('socialapi.relay.getActor');
     if (this.settings.servers.length > 0) {
       for (const serverUrl of this.settings.servers) {
         // Do not await because we don't want to block the startup of the services.
@@ -58,7 +58,7 @@ module.exports = {
         const serverDomainName = new URL(serverUrl).host;
         const remoteRelayActorUri = await ctx.call('webfinger.getRemoteUri', { account: `relay@${serverDomainName}` });
 
-        const alreadyFollowing = await ctx.call('activitypub.follow.isFollowing', {
+        const alreadyFollowing = await ctx.call('socialapi.follow.isFollowing', {
           follower: this.relayActor.id,
           following: remoteRelayActorUri
         });
@@ -159,7 +159,7 @@ module.exports = {
 
         this.logger.info(`Following remote relay actor ${remoteRelayActorUri}`);
 
-        await ctx.call('activitypub.outbox.post', {
+        await ctx.call('socialapi.outbox.post', {
           collectionUri: this.relayActor.outbox,
           '@context': 'https://www.w3.org/ns/activitystreams',
           actor: this.relayActor.id,

@@ -359,17 +359,17 @@ module.exports = {
     },
     async postActivity(type, resourceUri) {
       if (this.settings.activitypub.actorUri && this.settings.activitypub.activities.includes(type)) {
-        const outbox = await this.broker.call('activitypub.actor.getCollectionUri', {
+        const outbox = await this.broker.call('socialapi.actor.getCollectionUri', {
           actorUri: this.settings.activitypub.actorUri,
           predicate: 'outbox'
         });
-        const followers = await this.broker.call('activitypub.actor.getCollectionUri', {
+        const followers = await this.broker.call('socialapi.actor.getCollectionUri', {
           actorUri: this.settings.activitypub.actorUri,
           predicate: 'followers'
         });
 
         await this.broker.call(
-          'activitypub.outbox.post',
+          'socialapi.outbox.post',
           {
             collectionUri: outbox,
             type,

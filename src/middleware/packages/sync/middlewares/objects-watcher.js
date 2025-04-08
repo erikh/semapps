@@ -33,7 +33,7 @@ const ObjectsWatcherMiddleware = (config = {}) => {
     if (podProvider) {
       const url = new URL(resourceUri);
       const podOwnerUri = `${url.origin}/${url.pathname.split('/')[1]}`;
-      return await ctx.call('activitypub.actor.awaitCreateComplete', { actorUri: podOwnerUri });
+      return await ctx.call('socialapi.actor.awaitCreateComplete', { actorUri: podOwnerUri });
     }
     return relayActor;
   };
@@ -72,7 +72,7 @@ const ObjectsWatcherMiddleware = (config = {}) => {
       const actor = await getActor(ctx, resourceUri);
 
       return await ctx.call(
-        'activitypub.outbox.post',
+        'socialapi.outbox.post',
         {
           collectionUri: actor.outbox,
           '@context': 'https://www.w3.org/ns/activitystreams',
@@ -88,8 +88,8 @@ const ObjectsWatcherMiddleware = (config = {}) => {
     name: 'ObjectsWatcherMiddleware',
     async started(broker) {
       if (!podProvider) {
-        await broker.waitForServices('activitypub.relay');
-        relayActor = await broker.call('activitypub.relay.getActor');
+        await broker.waitForServices('socialapi.relay');
+        relayActor = await broker.call('socialapi.relay.getActor');
       }
 
       const containers = await broker.call('ldp.registry.list');

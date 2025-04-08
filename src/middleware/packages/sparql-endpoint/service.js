@@ -54,7 +54,7 @@ const SparqlEndpointService = {
     async 'auth.registered'(ctx) {
       const { webId } = ctx.params;
       if (this.settings.podProvider) {
-        await ctx.call('activitypub.actor.addEndpoint', {
+        await ctx.call('socialapi.actor.addEndpoint', {
           actorUri: webId,
           predicate: 'http://rdfs.org/ns/void#sparqlEndpoint',
           endpoint: urlJoin(webId, 'sparql')

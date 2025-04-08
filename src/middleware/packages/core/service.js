@@ -5,6 +5,7 @@ const { ActivityPubService, FULL_ACTOR_TYPES } = require('@semapps/activitypub')
 const { JsonLdService } = require('@semapps/jsonld');
 const { LdpService, DocumentTaggerMixin } = require('@semapps/ldp');
 const { OntologiesService } = require('@semapps/ontologies');
+const { SocialApiService } = require('@semapps/socialapi');
 const { SparqlEndpointService } = require('@semapps/sparql-endpoint');
 const { TripleStoreService } = require('@semapps/triplestore');
 const { VoidService } = require('@semapps/void');
@@ -46,6 +47,7 @@ const CoreService = {
     keys: {},
     ldp: {},
     signature: {},
+    socialapi: {},
     sparqlEndpoint: {},
     void: {},
     webacl: {},
@@ -62,6 +64,16 @@ const CoreService = {
         settings: {
           baseUri: baseUrl,
           ...this.settings.activitypub
+        }
+      });
+    }
+
+    if (this.settings.socialapi !== false) {
+      this.broker.createService({
+        mixins: [SocialApiService],
+        settings: {
+          defaultAccept: 'application/ld+json',
+          ...this.settings.socialapi
         }
       });
     }

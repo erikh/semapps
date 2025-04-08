@@ -8,7 +8,7 @@ module.exports = {
     acceptFollowOffers: true,
     mirrorGraph: true
   },
-  dependencies: ['activitypub.relay'],
+  dependencies: ['socialapi.relay'],
   created() {
     this.broker.createService({
       mixins: [SynchronizerService],
@@ -21,7 +21,7 @@ module.exports = {
     });
   },
   async started() {
-    this.relayActor = await this.broker.call('activitypub.relay.getActor');
+    this.relayActor = await this.broker.call('socialapi.relay.getActor');
   },
   activities: {
     offerFollow: {
@@ -33,7 +33,7 @@ module.exports = {
       },
       async onReceive(ctx, activity, recipientUri) {
         if (this.settings.acceptFollowOffers && recipientUri === this.relayActor.id) {
-          return await ctx.call('activitypub.outbox.post', {
+          return await ctx.call('socialapi.outbox.post', {
             collectionUri: this.relayActor.outbox,
             '@context': 'https://www.w3.org/ns/activitystreams',
             actor: this.relayActor.id,
